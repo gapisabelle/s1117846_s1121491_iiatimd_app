@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "948383510167",
+    "project_id": "iiatimd-roy-isabelle",
+    "storage_bucket": "iiatimd-roy-isabelle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948383510167:android:85bd1110a66b26453a03d2",
+        "android_client_info": {
+          "package_name": "com.example.movinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948383510167-2n48ihohkti679vpmojnmhqmednrq0rn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.movinder",
+            "certificate_hash": "56824a95210067f8a889a03bdccac939099ca56e"
+          }
+        },
+        {
+          "client_id": "948383510167-25i8e5mjs6tmrrc1tpg0dffdh434dr7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4K7DId3mvyDTz966DZK13E5xZ3IbYHBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948383510167-25i8e5mjs6tmrrc1tpg0dffdh434dr7t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
