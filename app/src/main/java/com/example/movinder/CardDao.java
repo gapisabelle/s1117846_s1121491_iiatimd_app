@@ -3,6 +3,7 @@ package com.example.movinder;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.movinder.Card;
@@ -30,7 +31,7 @@ public interface CardDao {
     @Query("SELECT COUNT(*) FROM card WHERE id = :id LIMIT 1")
     boolean exists(int id);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Card... cards);
 
     @Query("DELETE FROM card WHERE id = :id")

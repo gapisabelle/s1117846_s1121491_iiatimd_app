@@ -14,6 +14,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".MatchesActivity" />
+        <activity android:name=".ChatActivity2" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -30,16 +30,20 @@ public class MatchesActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.swipeActivity:
-                        startActivity(new Intent(getApplicationContext(), SwipeActivity.class));
                         overridePendingTransition(0, 0);
+                        startActivity(new Intent(getApplicationContext(), SwipeActivity.class));
                         return true;
                     case R.id.matches:
-                        startActivity(new Intent(getApplicationContext(), MatchesActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
+//                        overridePendingTransition(0, 0);
+//                        startActivity(new Intent(getApplicationContext(), MatchesActivity.class));
+                        return false;
                     case R.id.profile:
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         overridePendingTransition(0, 0);
+                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        return true;
+                    case R.id.chat:
+                        overridePendingTransition(0, 0);
+                        startActivity(new Intent(getApplicationContext(), ChatActivity2.class));
                         return true;
                 }
                 return false;

@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -27,13 +29,18 @@ import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class SwipeActivity extends AppCompatActivity implements CardStackListener {
     private CardStackView cardStackView;
     private CardStackLayoutManager cardStackLayoutManager;
-    private CardStackAdapter cardStackAdapter = new CardStackAdapter();
+    private CardStackAdapter cardStackAdapter = new CardStackAdapter(getApplicationContext());
+    MaterialButton buttonCross;
+    MaterialButton buttonHeart;
+    TextView swipeFeedbackText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,37 +54,43 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.swipeActivity:
-                        startActivity(new Intent(getApplicationContext(), SwipeActivity.class));
-                        overridePendingTransition(0, 0);
-                        return true;
+//                        overridePendingTransition(0, 0);
+//                        startActivity(new Intent(getApplicationContext(), SwipeActivity.class));
+                        return false;
                     case R.id.matches:
-                        startActivity(new Intent(getApplicationContext(), MatchesActivity.class));
                         overridePendingTransition(0, 0);
+                        startActivity(new Intent(getApplicationContext(), MatchesActivity.class));
                         return true;
                     case R.id.profile:
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         overridePendingTransition(0, 0);
+                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        return true;
+                    case R.id.chat:
+                        overridePendingTransition(0, 0);
+                        startActivity(new Intent(getApplicationContext(), ChatActivity2.class));
                         return true;
                 }
                 return false;
             }
         });
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class, "card").build();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+//                        AppDatabase.class, "card").build();
+//
+//                List<Card> cardList = db.cardDao().getAll();
+//                if (cardList.size() <= 5) { // If app got 5 or less cards, fetch some new ones
+//                    // TODO: Get new cards from API
+//                }
+//
+//                cardStackAdapter.setLocalDataSet(cardList.toArray(new Card[0]));
+//                db.close();
+//            }
+//        }).start();
 
-                List<Card> cardList = db.cardDao().getAll();
-                if (cardList.size() <= 5) { // If app got 5 or less cards, fetch some new ones
-                    // TODO: Get new cards from API
-                }
 
-                cardStackAdapter.setLocalDataSet(cardList.toArray(new Card[0]));
-                db.close();
-            }
-        }).start();
 
         // ENABLE BACK BUTTON IN TOP NAVIGATION
 //        ActionBar actionBar = getSupportActionBar();
@@ -90,14 +103,48 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
         cardStackLayoutManager.setSwipeThreshold(0.5f);
 
         this.setupButtons();
+        swipeFeedbackText = findViewById(R.id.swipeFeedbackText);
+        swipeFeedbackText.setText("Loading... Please wait!");
+        swipeFeedbackText.setVisibility(View.VISIBLE);
+        buttonCross.setVisibility(View.GONE);
+        buttonHeart.setVisibility(View.GONE);
+        this.getCards();
 
         cardStackView.setLayoutManager(cardStackLayoutManager);
         cardStackView.setAdapter(cardStackAdapter);
     }
 
+    public void getCards() {
+        Api.getCards(getApplicationContext(), new ApiCallback() {
+            @Override
+            public void onCards(Card[] cards) {
+                Utils.filterCards(getApplicationContext(), cards, new ApiCallback() {
+                    @Override
+                    public void onCards(Card[] cards) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+//                                List<Card> localCards = new ArrayList<Card>(Arrays.asList(cardStackAdapter.getLocalDataSet()));
+//                                Card[] localCards = cardStackAdapter.getLocalDataSet();
+                                List<Card> localCards = Arrays.asList(cards);
+//                                localCards.addAll(Arrays.asList(cards));
+
+
+                                cardStackAdapter.addToLocalDataSet(localCards);
+                                buttonCross.setVisibility(View.VISIBLE);
+                                buttonHeart.setVisibility(View.VISIBLE);
+                                swipeFeedbackText.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }, cardStackAdapter.getLocalDataSet());
+            }
+        });
+    }
+
     public void setupButtons() {
-        MaterialButton buttonCross = findViewById(R.id.button_cross);
-        MaterialButton buttonHeart = findViewById(R.id.button_heart);
+        buttonCross = findViewById(R.id.button_cross);
+        buttonHeart = findViewById(R.id.button_heart);
 
         buttonCross.setOnClickListener(event -> {
             SwipeAnimationSetting swipeSettings = new SwipeAnimationSetting.Builder()
@@ -140,6 +187,7 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
 
     @Override
     public void onCardSwiped(Direction direction) {
+        System.out.println("[Movinder SwipeActivity] onCardSwiped");
         AsyncTask.execute(() -> {
             AppDatabase dbCards = Room.databaseBuilder(getApplicationContext(),
                     AppDatabase.class, "card").build();
@@ -149,13 +197,32 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
 
 
             int position = cardStackLayoutManager.getTopPosition()-1;
-            Card card = dbCards.cardDao().findById(cardStackAdapter.getCard(position).getId());
+            Card card = cardStackAdapter.getCard(position);
 
-            dbCards.cardDao().delete(card);
+            List<Card> cardList = dbCards.cardDao().getAll();
+            System.out.println("[Movinder SwipeActivity] cardList size:" + cardList.size());
+            if (cardList.size() <= 5) {
+                this.getCards();
+            }
+
+            System.out.printf("[Movinder SwipeActivity] deleteById \nid:%s\ntitle:%s\nexists:%s\n\n", card.getId(), card.getTitle(), dbCards.cardDao().exists(card.getId()));
+            dbCards.cardDao().deleteById(card.getId());
             if (!dbSwiped.cardDao().exists(card.getId())) {
                 card.setLiked(direction == Direction.Left ? -1 : 1);
                 dbSwiped.cardDao().insertAll(card);
             }
+
+            dbSwiped.close();
+            dbCards.close();
+
+            int index = cardStackAdapter.removeCardById(cardStackAdapter.getCard(position).getId());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+//                    cardStackAdapter.notifyItemRangeChanged(index,cardStackAdapter.getItemCount());
+                    cardStackAdapter.notifyItemRemoved(index);
+                }
+            });
         });
 //        new Thread(new Runnable() {
 //            @Override

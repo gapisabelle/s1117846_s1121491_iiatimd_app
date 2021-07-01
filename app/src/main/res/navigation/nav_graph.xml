@@ -11,7 +11,9 @@
         android:id="@+id/matches"
         android:name="com.example.movinder.MatchesActivity"
         android:label="Matches"/>
-    <activity android:id="@+id/chat" />
+    <activity android:id="@+id/chat"
+        android:name="com.example.movinder.ChatActivity2"
+        android:label=""/>
     <activity android:id="@+id/profile"
         android:name="com.example.movinder.ProfileActivity"
         android:label=""/>

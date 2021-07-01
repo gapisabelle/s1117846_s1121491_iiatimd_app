@@ -18,4 +18,31 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav"/>
 
+    <Button
+        android:id="@+id/btnClearSwipedDb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear swiped DB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnClearPageDb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear page DB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnClearSwipedDb" />
+
+    <Button
+        android:id="@+id/btnClearCardDb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear card DB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnClearPageDb" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
