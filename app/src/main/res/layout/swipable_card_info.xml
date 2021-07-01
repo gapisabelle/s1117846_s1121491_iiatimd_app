@@ -140,7 +140,7 @@
             app:layout_constraintGuide_begin="320dp" />
 
         <TextView
-            android:id="@+id/card_time"
+            android:id="@+id/card_language"
             android:layout_width="60dp"
             android:layout_height="20dp"
             android:layout_marginTop="56dp"
@@ -158,7 +158,8 @@
             android:layout_marginTop="56dp"
             app:layout_constraintStart_toStartOf="@+id/guideline5"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_ant_design_clock_circle_filled"></ImageView>
+            app:srcCompat="@drawable/ic_baseline_language_24"
+            app:tint="@color/primary"></ImageView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

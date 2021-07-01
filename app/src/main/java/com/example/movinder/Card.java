@@ -1,22 +1,74 @@
 package com.example.movinder;
 
-public class Card {
-    private int id;
-    private String title;
-    private String rating;
-    private String time;
-    private String date;
-    private String categories;
-    private String imageURI;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
-    public Card(int id, String title, String rating, String time, String date, String categories, String imageURI) {
+@Entity
+public class Card {
+    @PrimaryKey
+    public int id;
+    @ColumnInfo(name = "title")
+    public String title;
+    @ColumnInfo(name = "rating")
+    public String rating;
+    @ColumnInfo(name = "language")
+    public String language;
+    @ColumnInfo(name = "date")
+    public String date;
+    @ColumnInfo(name = "categories")
+    public String categories;
+    @ColumnInfo(name = "image")
+    public String imageURI;
+    @ColumnInfo(name = "liked")
+    public int liked = 0;
+    @ColumnInfo(name = "userId")
+    public int userId = -1;
+    @ColumnInfo(name = "username")
+    public String username = "";
+
+    @Ignore
+    public Card(int id, String title, String rating, String language, String date, String categories, String imageURI) {
         this.id = id;
         this.title = title;
         this.rating = rating;
-        this.time = time;
+        this.language = language;
         this.date = date;
         this.categories = categories;
         this.imageURI = imageURI;
+    }
+    public Card(int id, String title, String rating, String language, String date, String categories, String imageURI, int liked, int userId, String username) {
+        this.id = id;
+        this.title = title;
+        this.rating = rating;
+        this.language = language;
+        this.date = date;
+        this.categories = categories;
+        this.imageURI = imageURI;
+        this.liked = liked;
+        this.userId = userId;
+        this.username = username;
+    }
+
+    @Ignore
+    public Card() {
+
+    }
+
+    public int getUserId() { return liked; }
+    public void setUserId(int liked) {
+        this.liked = liked;
+    }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getLiked() { return liked; }
+    public void setLiked(int liked) {
+        this.liked = liked;
     }
 
     public int getId() {
@@ -43,12 +95,12 @@ public class Card {
         this.rating = rating;
     }
 
-    public String getTime() {
-        return time;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setLanguage(String time) {
+        this.language = time;
     }
 
     public String getDate() {

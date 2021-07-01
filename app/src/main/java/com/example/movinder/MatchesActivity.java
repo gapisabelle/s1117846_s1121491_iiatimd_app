@@ -2,14 +2,21 @@ package com.example.movinder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MatchesActivity extends AppCompatActivity {
+    MatchesAdapter matchesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,5 +45,29 @@ public class MatchesActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        TextView textView = findViewById(R.id.nomatchestext);
+        textView.setText("Loading... Please wait");
+
+        RecyclerView matchesList = findViewById(R.id.matchesList);
+        matchesAdapter = new MatchesAdapter();
+        matchesList.setAdapter(matchesAdapter);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                        AppDatabase.class, "cardMatches").build();
+
+                List<Card> cardList = db.cardDao().getAll();
+
+                // TODO: Load matches from API
+
+                if (cardList.size() == 0) textView.setText("You don't have any matches.");
+
+                matchesAdapter.setLocalDataSet(cardList.toArray(new Card[0]));
+                db.close();
+            }
+        }).start();
     }
 }
