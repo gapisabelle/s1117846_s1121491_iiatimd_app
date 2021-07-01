@@ -1,7 +1,9 @@
 package com.example.movinder;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.RequiresApi;
 
@@ -26,13 +28,29 @@ public class Api {
 
     }
 
+    // TODO: Mix tv shows and movies together
+
     static void getCards(Context context, ApiCallback callback) {
-        getCards(context, "1", callback);
+        // TODO: Get shared preferences page
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        int tvPage = sharedPref.getInt("tvPage", -1);
+        if (tvPage == -1) {
+            tvPage = 1;
+            sharedPref.edit().putInt("tvPage", 1).apply();
+        }
+
+        getCards(context, String.valueOf(tvPage), callback);
     }
 
     static void getCards(Context context, String page, ApiCallback callback) {
+        if (!Utils.hasNetworkConnection(context)) {
+            System.out.println("[Movinder] DONT HAVE NETWORK CONNECTION");
+            callback.onCards(new Card[0]);
+            return; // TODO: return cards from local database.
+        }
+
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        String url = "http://192.168.1.120:8000/api/tv/popular";
+        String url = "http://192.168.1.120:8000/api/tv/popular/" + page;
         System.out.println("[Movinder] GET MOVIE DATA");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -75,6 +93,7 @@ public class Api {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         callback.onCards(new Card[0]);
+                        // TODO: Get from local database
                         System.out.println("[MovinderERR]" + error.getMessage());
                         error.printStackTrace();
                     }

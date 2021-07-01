@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -27,49 +28,53 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setUpFirebase();
-        gotoSwipeActivity();
+        this.gotoSwipeActivity();
     }
 
     public void setUpFirebase(){
-        FirebaseOptions fbOptions = new FirebaseOptions.Builder()
-                .setProjectId("iiatimd-roy-isabelle").setApplicationId("1:948383510167:web:3f1aebc24b2f621e3a03d2").setApiKey("AIzaSyBSLidGsDuVHu8Poi5kQ_D_bhHm_fK48T8").setDatabaseUrl("https://iiatimd-roy-isabelle-default-rtdb.europe-west1.firebasedatabase.app").build();
-        FirebaseApp.initializeApp(this, fbOptions, "Movinder");
+        if (FirebaseApp.getApps(this).isEmpty()) {
+            FirebaseOptions fbOptions = new FirebaseOptions.Builder()
+                    .setProjectId("iiatimd-roy-isabelle").setApplicationId("1:948383510167:web:3f1aebc24b2f621e3a03d2").setApiKey("AIzaSyBSLidGsDuVHu8Poi5kQ_D_bhHm_fK48T8").setDatabaseUrl("https://iiatimd-roy-isabelle-default-rtdb.europe-west1.firebasedatabase.app").build();
+            FirebaseApp.initializeApp(this, fbOptions, "Movinder");
+        }
+
+
         // Instantiate the RequestQueue with the cache and network.
 //        requestQueue = new RequestQueue(cache, network);
 //        // Start the queue
 //        requestQueue.start();
 
-        Api.getCards(getApplicationContext(), new ApiCallback() {
-            @Override
-            public void onCards(Card[] cards) {
-                System.out.println("[Movinder] APICALLBACK");
-                for (Card card : cards) {
-                    System.out.println("[Movinder ApiTest] " + card.getTitle());
-                }
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "card").fallbackToDestructiveMigration().build();
-                        AppDatabase dbSwiped = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
-
-                        List<Card> cardListSwiped = dbSwiped.cardDao().getAll();
-                        List<Card> cardList = db.cardDao().getAll();
-                        if (cardList.size() == 0) {
-                            db.cardDao().insertAll(cards);
-                        }
-                        for (Card card : cardListSwiped) {
-                            System.out.println("[Movinder CardSWIPED]" + card.getTitle() + " liked:" + (card.getLiked() == 1 ? "yes" : "no"));
-                        }
-
-                        db.close();
-                        dbSwiped.close();
-
-                        gotoSwipeActivity();
-                    }
-                }).start();
-            }
-        });
+//        Api.getCards(getApplicationContext(), new ApiCallback() {
+//            @Override
+//            public void onCards(Card[] cards) {
+//                System.out.println("[Movinder] APICALLBACK");
+//                for (Card card : cards) {
+//                    System.out.println("[Movinder ApiTest] " + card.getTitle());
+//                }
+//
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "card").fallbackToDestructiveMigration().build();
+//                        AppDatabase dbSwiped = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
+//
+//                        List<Card> cardListSwiped = dbSwiped.cardDao().getAll();
+//                        List<Card> cardList = db.cardDao().getAll();
+//                        if (cardList.size() == 0) {
+//                            db.cardDao().insertAll(cards);
+//                        }
+//                        for (Card card : cardListSwiped) {
+//                            System.out.println("[Movinder CardSWIPED]" + card.getTitle() + " liked:" + (card.getLiked() == 1 ? "yes" : "no"));
+//                        }
+//
+//                        db.close();
+//                        dbSwiped.close();
+//
+//                        gotoSwipeActivity();
+//                    }
+//                }).start();
+//            }
+//        });
 
 //        new Thread(new Runnable() {
 //            @Override
