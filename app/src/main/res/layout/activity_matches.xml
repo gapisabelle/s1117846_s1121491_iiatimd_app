@@ -7,22 +7,44 @@
     tools:context=".MatchesActivity">
 
     <TextView
+        android:id="@+id/nomatchestext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No matches found"
+        android:textSize="32sp"
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toBottomOf="@+id/matchesList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/matchesList" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/matchesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="YOU DONT HAVE MATCHES">
-
-    </TextView>
+        android:layout_marginBottom="72dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spanCount="2" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigatin_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
+        android:layout_width="422dp"
+        android:layout_height="72dp"
         android:background="@drawable/shape_navigation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav"/>
+        app:menu="@menu/bottom_nav" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="659dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

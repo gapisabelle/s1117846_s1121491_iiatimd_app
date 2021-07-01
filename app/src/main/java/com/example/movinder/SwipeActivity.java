@@ -3,8 +3,10 @@ package com.example.movinder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,12 +27,13 @@ import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Random;
 
 public class SwipeActivity extends AppCompatActivity implements CardStackListener {
     private CardStackView cardStackView;
     private CardStackLayoutManager cardStackLayoutManager;
-    private CardStackAdapter cardStackAdapter;
+    private CardStackAdapter cardStackAdapter = new CardStackAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +63,21 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
             }
         });
 
-        String url = "http://192.168.1.120:8000/api/tv/popular";
-        System.out.println("[Movinder] GET MOVIE DATA");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                        AppDatabase.class, "card").build();
 
-        Card[] dataSet = new Card[]{
-                new Card(0, "Test1", "1", "3h 1m", "2019", "Action, Test", "https://source.unsplash.com/random?sig=" + new Random(99999).nextInt()),
-                new Card(1, "Test2", "2", "99h 1m", "9111", "Action, Test, Test2", "https://source.unsplash.com/random?sig=2" + new Random(12345).nextInt()),
-                new Card(1, "Test3", "3", "99h 2m", "9911", "Action, Test, Test3", "https://source.unsplash.com/random?sig=3" + new Random(234567).nextInt()),
-                new Card(1, "Test4", "4", "99h 3m", "9991", "Action, Test, Test4", "https://source.unsplash.com/random?sig=4" + new Random(45678).nextInt()),
-                new Card(1, "Test5", "5", "99h 4m", "1111", "Action, Test, Test5", "https://source.unsplash.com/random?sig=5" + new Random(567890).nextInt()),
-                new Card(1, "Test6", "6", "99h 5m", "1119", "Action, Test, Test6", "https://source.unsplash.com/random?sig=6" + new Random(6789).nextInt()),
-        };
+                List<Card> cardList = db.cardDao().getAll();
+                if (cardList.size() <= 5) { // If app got 5 or less cards, fetch some new ones
+                    // TODO: Get new cards from API
+                }
+
+                cardStackAdapter.setLocalDataSet(cardList.toArray(new Card[0]));
+                db.close();
+            }
+        }).start();
 
         // ENABLE BACK BUTTON IN TOP NAVIGATION
 //        ActionBar actionBar = getSupportActionBar();
@@ -85,7 +92,7 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
         this.setupButtons();
 
         cardStackView.setLayoutManager(cardStackLayoutManager);
-        cardStackView.setAdapter(new CardStackAdapter(dataSet));
+        cardStackView.setAdapter(cardStackAdapter);
     }
 
     public void setupButtons() {
@@ -116,12 +123,14 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        System.out.println("[Movinder optionSelected]");
+        return true;
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                this.finish();
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -131,7 +140,37 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
 
     @Override
     public void onCardSwiped(Direction direction) {
-        System.out.println("[Movinder] " + direction.name());
+        AsyncTask.execute(() -> {
+            AppDatabase dbCards = Room.databaseBuilder(getApplicationContext(),
+                    AppDatabase.class, "card").build();
+
+            AppDatabase dbSwiped = Room.databaseBuilder(getApplicationContext(),
+                    AppDatabase.class, "cardSwiped").build();
+
+
+            int position = cardStackLayoutManager.getTopPosition()-1;
+            Card card = dbCards.cardDao().findById(cardStackAdapter.getCard(position).getId());
+
+            dbCards.cardDao().delete(card);
+            if (!dbSwiped.cardDao().exists(card.getId())) {
+                card.setLiked(direction == Direction.Left ? -1 : 1);
+                dbSwiped.cardDao().insertAll(card);
+            }
+        });
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                int position = cardStackLayoutManager.getTopPosition()-1;
+//                Card card = cardStackAdapter.getCard(position);
+//                AppDatabase dbSwiped = Room.databaseBuilder(getApplicationContext(),
+//                        AppDatabase.class, "cardSwiped").build();
+//                dbSwiped.cardDao().delete(card);
+//                System.out.println("[Movinder] " + direction.name());
+//                System.out.println("[Movinder swipe] " + cardStackAdapter.getCard(position).getId());
+//                System.out.println("[Movinder swipe] " + cardStackAdapter.getCard(position).getTitle());
+//            }
+//        }).start();
+
     }
 
     @Override

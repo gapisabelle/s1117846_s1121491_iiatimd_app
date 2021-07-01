@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.ViewHolder> {
+public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.ViewHolder> {
     private Card[] localDataSet;
 
-    public CardStackAdapter() {
+    public MatchesAdapter() {
         localDataSet = new Card[0];
     }
 
@@ -37,22 +37,22 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.swipable_card_info, parent, false);
+                .inflate(R.layout.match_card_info, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.cardTitle.setText(localDataSet[position].getTitle());
-        String fullLanguage = localDataSet[position].getLanguage();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            fullLanguage = ULocale.forLanguageTag(localDataSet[position].getLanguage()).getDisplayLanguageWithDialect();
-        }
-        holder.cardLanguage.setText(fullLanguage);
+//        String fullLanguage = localDataSet[position].getLanguage();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            fullLanguage = ULocale.forLanguageTag(localDataSet[position].getLanguage()).getDisplayLanguageWithDialect();
+//        }
+//        holder.cardLanguage.setText(fullLanguage);
 
-        holder.cardRating.setText(localDataSet[position].getRating());
-        holder.cardYear.setText(localDataSet[position].getDate());
-        holder.cardCategories.setText(localDataSet[position].getCategories());
+//        holder.cardRating.setText(localDataSet[position].getRating());
+//        holder.cardYear.setText(localDataSet[position].getDate());
+//        holder.cardCategories.setText(localDataSet[position].getCategories());
 
         Glide.with(holder.cardImage).load(localDataSet[position].getImageURI()).into(holder.cardImage);
 //        holder.cardImage.setText(localDataSet[position].getImageURI());
@@ -83,7 +83,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         }
     }
 
-    public CardStackAdapter(Card[] dataSet) {
+    public MatchesAdapter(Card[] dataSet) {
         localDataSet = dataSet;
     }
 
