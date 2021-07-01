@@ -11,24 +11,91 @@
         android:layout_height="match_parent"
         android:background="@color/background"
         tools:context=".MainActivity"
-        tools:layout_editor_absoluteX="-64dp"
-        tools:layout_editor_absoluteY="35dp">
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="-47dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:orientation="vertical"
+        <TableLayout
+            android:id="@+id/tableLayout2"
+            android:layout_width="355dp"
+            android:layout_height="275dp"
+            android:layout_marginBottom="174dp"
+            app:layout_constraintBottom_toTopOf="@+id/toLogin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="166dp">
+            app:layout_constraintStart_toStartOf="parent">
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="32dp">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_entypo_email" />
+
+                <EditText
+                    android:id="@+id/editTextTextPersonName2"
+                    android:layout_width="291dp"
+                    android:layout_height="45dp"
+                    android:ems="10"
+                    android:hint="Your Email"
+                    android:inputType="textPersonName"
+                    android:shadowColor="#fff"
+                    android:textColor="#fff"
+                    android:textColorHint="#b6b2b2" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="32dp">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="76dp"
+                    android:layout_height="44dp"
+                    app:srcCompat="@drawable/ic_bi_person_fill" />
+
+                <EditText
+                    android:id="@+id/editTextTextPersonName2"
+                    android:layout_width="267dp"
+                    android:layout_height="45dp"
+                    android:ems="10"
+                    android:hint="Username"
+                    android:inputType="textPersonName"
+                    android:shadowColor="#fff"
+                    android:textColor="#fff"
+                    android:textColorHint="#b6b2b2" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="15dp">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="59dp"
+                    android:layout_height="44dp"
+                    app:srcCompat="@drawable/ic_bi_key_fill" />
+
+                <EditText
+                    android:id="@+id/editTextTextPersonName"
+                    android:layout_width="287dp"
+                    android:layout_height="44dp"
+                    android:ems="10"
+                    android:hint="Password"
+                    android:inputType="textPersonName"
+                    android:shadowColor="#fff"
+                    android:textColor="#fff"
+                    android:textColorHint="#b6b2b2" />
+
+            </TableRow>
+
+        </TableLayout>
 
         <Button
             android:id="@+id/button2"
@@ -46,108 +113,30 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="47dp"
-            android:layout_height="45dp"
-            app:srcCompat="@drawable/ic_bi_person_fill"
-            tools:layout_editor_absoluteX="28dp"
-            tools:layout_editor_absoluteY="241dp" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName2"
-            android:layout_width="291dp"
-            android:layout_height="45dp"
-            android:ems="10"
-            android:hint="Your Email"
-            android:inputType="textPersonName"
-            android:shadowColor="#fff"
-            android:textColor="#fff"
-            android:textColorHint="#b6b2b2"
-            tools:layout_editor_absoluteX="78dp"
-            tools:layout_editor_absoluteY="166dp" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName5"
-            android:layout_width="291dp"
-            android:layout_height="45dp"
-            android:ems="10"
-            android:hint="Username"
-            android:inputType="textPersonName"
-            android:shadowColor="#fff"
-            android:textColor="#fff"
-            android:textColorHint="#b6b2b2"
-            tools:layout_editor_absoluteX="78dp"
-            tools:layout_editor_absoluteY="241dp" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            app:srcCompat="@drawable/ic_entypo_email"
-            tools:layout_editor_absoluteX="31dp"
-            tools:layout_editor_absoluteY="166dp" />
-
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/toLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="29dp"
+            android:clickable="true"
             android:text="Already a Member? Log in"
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toTopOf="@+id/button2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/editTextTextPersonName"
-            android:layout_width="287dp"
-            android:layout_height="44dp"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPersonName"
-            android:shadowColor="#fff"
-            android:textColor="#fff"
-            android:textColorHint="#b6b2b2"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="319dp" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName3"
-            android:layout_width="287dp"
-            android:layout_height="44dp"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPersonName"
-            android:shadowColor="#fff"
-            android:textColor="#fff"
-            android:textColorHint="#b6b2b2"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="395dp" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="45dp"
-            android:layout_height="44dp"
-            app:srcCompat="@drawable/ic_bi_key_fill"
-            tools:layout_editor_absoluteX="30dp"
-            tools:layout_editor_absoluteY="319dp" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="45dp"
-            android:layout_height="44dp"
-            app:srcCompat="@drawable/ic_bi_key_fill"
-            tools:layout_editor_absoluteX="30dp"
-            tools:layout_editor_absoluteY="395dp" />
-
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_movinder_logo"
-            tools:layout_editor_absoluteX="36dp"
-            tools:layout_editor_absoluteY="46dp" />
+            android:layout_width="351dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/tableLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_movinder_logo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
