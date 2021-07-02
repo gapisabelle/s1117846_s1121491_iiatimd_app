@@ -50,12 +50,11 @@ public class Utils {
 //                }
 
                 List<Card> cardListSwiped = dbSwiped.cardDao().getAll();
-                List<Card> cardList = db.cardDao().getAll();
 
                 for (Card card : cardListSwiped) {
                     db.cardDao().deleteById(card.getId());
-                    cardList.remove(card);
                 }
+                List<Card> cardList = db.cardDao().getAll();
                 for (Card card : extra) {
                     cardList.remove(card);
 //                    db.cardDao().deleteById(card.getId());

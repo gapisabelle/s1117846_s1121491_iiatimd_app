@@ -28,11 +28,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setUpFirebase();
-        this.gotoSwipeActivity();
+//        this.gotoSwipeActivity();
+
+        Api.register(getApplicationContext());
     }
 
     public void setUpFirebase(){
-        if (FirebaseApp.getApps(this).isEmpty()) {
+        if (!FirebaseApp.getApps(this).get(0).getName().equals("Movinder")) {
             FirebaseOptions fbOptions = new FirebaseOptions.Builder()
                     .setProjectId("iiatimd-roy-isabelle").setApplicationId("1:948383510167:web:3f1aebc24b2f621e3a03d2").setApiKey("AIzaSyBSLidGsDuVHu8Poi5kQ_D_bhHm_fK48T8").setDatabaseUrl("https://iiatimd-roy-isabelle-default-rtdb.europe-west1.firebasedatabase.app").build();
             FirebaseApp.initializeApp(this, fbOptions, "Movinder");

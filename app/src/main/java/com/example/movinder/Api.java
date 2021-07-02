@@ -20,7 +20,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class Api {
@@ -100,5 +102,35 @@ public class Api {
                 });
 
         requestQueue.add(jsonObjectRequest);
+    }
+
+
+    static void register(Context context) {
+        String url = "http://192.168.1.120:8000/api/auth/register";
+
+        Map<String, String> params = new HashMap();
+        params.put("name", "HOI22");
+        params.put("email", "test12345678991@test.com");
+        params.put("password", "testtest");
+        params.put("password_confirmation", "testtest");
+
+        JSONObject parameters = new JSONObject(params);
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                System.out.println(response.toString());
+                //TODO: handle success
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.printf("[MovinderError] %s\n", error.getMessage());
+                //TODO: handle failure
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonRequest);
     }
 }
