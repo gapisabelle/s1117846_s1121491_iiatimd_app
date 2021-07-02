@@ -101,5 +101,12 @@ public class ProfileActivity extends AppCompatActivity {
                 }).start();
             }
         });
+
+        findViewById(R.id.easterEggBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "BigBrainError: The brain was not responding anymore.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
