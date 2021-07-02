@@ -17,7 +17,7 @@
         <TableLayout
             android:id="@+id/tableLayout2"
             android:layout_width="355dp"
-            android:layout_height="275dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="174dp"
             app:layout_constraintBottom_toTopOf="@+id/toLogin"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,12 +35,12 @@
                     app:srcCompat="@drawable/ic_entypo_email" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName2"
+                    android:id="@+id/registerEmail"
                     android:layout_width="291dp"
                     android:layout_height="45dp"
                     android:ems="10"
                     android:hint="Your Email"
-                    android:inputType="textPersonName"
+                    android:inputType="textEmailAddress"
                     android:shadowColor="#fff"
                     android:textColor="#fff"
                     android:textColorHint="#b6b2b2" />
@@ -59,12 +59,12 @@
                     app:srcCompat="@drawable/ic_bi_person_fill" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName2"
+                    android:id="@+id/registerUsername"
                     android:layout_width="267dp"
                     android:layout_height="45dp"
                     android:ems="10"
                     android:hint="Username"
-                    android:inputType="textPersonName"
+                    android:inputType="text"
                     android:shadowColor="#fff"
                     android:textColor="#fff"
                     android:textColorHint="#b6b2b2" />
@@ -83,12 +83,37 @@
                     app:srcCompat="@drawable/ic_bi_key_fill" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName"
+                    android:id="@+id/registerPassword"
                     android:layout_width="287dp"
                     android:layout_height="44dp"
                     android:ems="10"
                     android:hint="Password"
-                    android:inputType="textPersonName"
+                    android:inputType="textPassword"
+                    android:shadowColor="#fff"
+                    android:textColor="#fff"
+                    android:textColorHint="#b6b2b2" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="15dp">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="59dp"
+                    android:layout_height="44dp"
+                    app:srcCompat="@drawable/ic_bi_key_fill" />
+
+                <EditText
+                    android:id="@+id/registerPasswordConfirmation"
+                    android:layout_width="287dp"
+                    android:layout_height="44dp"
+                    android:ems="10"
+                    android:hint="Password confirmation"
+                    android:inputType="textPassword"
                     android:shadowColor="#fff"
                     android:textColor="#fff"
                     android:textColorHint="#b6b2b2" />
@@ -98,7 +123,7 @@
         </TableLayout>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/registerBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -121,7 +146,7 @@
             android:clickable="true"
             android:text="Already a Member? Log in"
             android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
+            app:layout_constraintBottom_toTopOf="@+id/registerBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

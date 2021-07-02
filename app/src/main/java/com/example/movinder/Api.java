@@ -105,26 +105,43 @@ public class Api {
     }
 
 
-    static void register(Context context) {
+    static void register(Context context, JSONObject details, ApiCallback callback) {
         String url = "http://192.168.1.120:8000/api/auth/register";
 
-        Map<String, String> params = new HashMap();
-        params.put("name", "HOI22");
-        params.put("email", "test12345678991@test.com");
-        params.put("password", "testtest");
-        params.put("password_confirmation", "testtest");
-
-        JSONObject parameters = new JSONObject(params);
-
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                callback.onRegister(response);
                 System.out.println(response.toString());
                 //TODO: handle success
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                callback.onRegister(new JSONObject());
+                error.printStackTrace();
+                System.out.printf("[MovinderError] %s\n", error.getMessage());
+                //TODO: handle failure
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
+    static void login(Context context, JSONObject details, ApiCallback callback) {
+        String url = "http://192.168.1.120:8000/api/auth/login";
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onLogin(response);
+                System.out.println(response.toString());
+                //TODO: handle success
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onLogin(new JSONObject());
                 error.printStackTrace();
                 System.out.printf("[MovinderError] %s\n", error.getMessage());
                 //TODO: handle failure

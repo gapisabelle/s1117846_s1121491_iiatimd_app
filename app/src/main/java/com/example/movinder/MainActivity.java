@@ -7,13 +7,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -34,6 +40,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button toRegister = findViewById(R.id.toRegister);
         toRegister.setOnClickListener(this);
+        Button loginBtn = findViewById(R.id.loginBtn);
+        EditText loginEmail = findViewById(R.id.loginEmail);
+        EditText loginPassword = findViewById(R.id.loginPassword);
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Map<String, String> params = new HashMap();
+                params.put("email", loginEmail.getText().toString());
+                params.put("password", loginPassword.getText().toString());
+                JSONObject details = new JSONObject(params);
+                Api.login(getApplicationContext(), details, new ApiCallback() {
+                    @Override
+                    public void onLogin(JSONObject result) {
+                        try {
+                            System.out.printf("[Movinder RegisterActivity] onRegister %s\n", result.get("user"));
+                            gotoSwipeActivity();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
 //        Intent intent = new Intent(this, MainActivity.class);
 //        startActivity(intent);
     }
@@ -43,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent toRegister = new Intent(this, RegisterActivity.class);
         startActivity(toRegister);
 //        this.gotoSwipeActivity();
-
-        Api.register(getApplicationContext());
     }
 
     public void setUpFirebase(){
