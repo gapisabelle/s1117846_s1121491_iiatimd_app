@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/swipeActivity" android:title="Home" android:icon="@drawable/ic_mdi_cards_outline"></item>
+    <item android:id="@+id/matches" android:title="Matches" android:icon="@drawable/ic_emojione_monotone_fire"></item>
+    <item android:id="@+id/chat" android:title="Chat" android:icon="@drawable/ic_bi_chat_dots_fill"></item>
+    <item android:id="@+id/profile" android:title="Profile" android:icon="@drawable/ic_bi_person_circle"></item>
+</menu>

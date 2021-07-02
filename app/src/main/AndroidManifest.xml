@@ -3,14 +3,18 @@
     package="com.example.movinder">
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Movinder">
-        <activity android:name=".RegisterActivity"></activity>
+        android:theme="@style/Theme.Movinder"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".MatchesActivity" />
         <activity android:name=".ChatActivity2" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -19,6 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SwipeActivity" />
     </application>
 
 </manifest>
