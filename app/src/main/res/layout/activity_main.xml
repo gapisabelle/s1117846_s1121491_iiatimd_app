@@ -12,7 +12,7 @@
         android:layout_width="345dp"
         android:layout_height="165dp"
         android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/loginBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent">
@@ -29,12 +29,12 @@
                 app:srcCompat="@drawable/ic_bi_person_fill" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/loginEmail"
                 android:layout_width="287dp"
                 android:layout_height="match_parent"
                 android:ems="10"
                 android:hint="Email"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:shadowColor="#fff"
                 android:textColor="#fff"
                 android:textColorHint="#b6b2b2" />
@@ -51,12 +51,12 @@
                 app:srcCompat="@drawable/ic_bi_key_fill" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName2"
+                android:id="@+id/loginPassword"
                 android:layout_width="291dp"
                 android:layout_height="45dp"
                 android:ems="10"
                 android:hint="Password"
-                android:inputType="textPersonName"
+                android:inputType="textPassword"
                 android:shadowColor="#fff"
                 android:textColor="#fff"
                 android:textColorHint="#b6b2b2" />
@@ -81,7 +81,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
