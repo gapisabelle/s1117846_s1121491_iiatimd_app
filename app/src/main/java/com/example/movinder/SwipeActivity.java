@@ -232,6 +232,7 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
 
             Utils.addToSwipedCardDb(getApplicationContext(), card);
             Utils.removeFromCardDb(getApplicationContext(), card);
+            card.setLiked(direction == Direction.Left ? -1 : 1);
             Api.pushSwipe(getApplicationContext(), card, new ApiCallback() {
                 @Override
                 public void onSwipeAdded(JSONObject result) {
