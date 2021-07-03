@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setUpFirebase();
+//        Intent intent = new Intent(this, ChatActivity2.class);
+//        startActivity(intent);
 
         Button toRegister = findViewById(R.id.toRegister);
         toRegister.setOnClickListener(this);

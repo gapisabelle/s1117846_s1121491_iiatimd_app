@@ -54,7 +54,7 @@ public class Api {
         }
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        String url = "http://192.168.1.120:8000/api/tv/popular/" + page;
+        String url = "http://localhost:8000/api/tv/popular/" + page;
         System.out.println("[Movinder] GET MOVIE DATA");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -108,7 +108,7 @@ public class Api {
 
 
     static void register(Context context, JSONObject details, ApiCallback callback) {
-        String url = "http://192.168.1.120:8000/api/auth/register";
+        String url = "http://localhost:8000/api/auth/register";
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
             @Override
@@ -131,7 +131,7 @@ public class Api {
     }
 
     static void login(Context context, JSONObject details, ApiCallback callback) {
-        String url = "http://192.168.1.120:8000/api/auth/login";
+        String url = "http://localhost:8000/api/auth/login";
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
             @Override
@@ -159,7 +159,7 @@ public class Api {
     }
 
     static void getSwipes(Context context, ApiCallback callback) {
-        String url = "http://192.168.1.120:8000/api/swipe";
+        String url = "http://localhost:8000/api/swipe";
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
