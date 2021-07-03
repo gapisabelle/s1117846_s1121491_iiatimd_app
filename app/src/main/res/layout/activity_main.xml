@@ -7,24 +7,65 @@
     android:background="@color/background"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:orientation="vertical"
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="345dp"
+        android:layout_height="165dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/loginBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="166dp">
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <TableRow
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="76dp"
+                android:layout_height="44dp"
+                app:srcCompat="@drawable/ic_bi_person_fill" />
+
+            <EditText
+                android:id="@+id/loginEmail"
+                android:layout_width="287dp"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:shadowColor="#fff"
+                android:textColor="#fff"
+                android:textColorHint="#b6b2b2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="59dp"
+                android:layout_height="44dp"
+                app:srcCompat="@drawable/ic_bi_key_fill" />
+
+            <EditText
+                android:id="@+id/loginPassword"
+                android:layout_width="291dp"
+                android:layout_height="45dp"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:shadowColor="#fff"
+                android:textColor="#fff"
+                android:textColorHint="#b6b2b2" />
+        </TableRow>
+
+    </TableLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/toRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -40,63 +81,21 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="292dp"
+        android:layout_marginBottom="212dp"
         android:background="@drawable/button2"
         android:text="Log In"
         android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="47dp"
-        android:layout_height="44dp"
-        app:srcCompat="@drawable/ic_bi_person_fill"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="166dp" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName2"
-        android:layout_width="291dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:hint="Your Email"
-        android:inputType="textPersonName"
-        android:shadowColor="#fff"
-        android:textColor="#fff"
-        android:textColorHint="#b6b2b2"
-        tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="166dp" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="287dp"
-        android:layout_height="44dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPersonName"
-        android:shadowColor="#fff"
-        android:textColor="#fff"
-        android:textColorHint="#b6b2b2"
-        tools:layout_editor_absoluteX="80dp"
-        tools:layout_editor_absoluteY="245dp" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="45dp"
-        android:layout_height="44dp"
-        app:srcCompat="@drawable/ic_bi_key_fill"
-        tools:layout_editor_absoluteX="33dp"
-        tools:layout_editor_absoluteY="245dp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -105,7 +104,7 @@
         android:layout_marginBottom="24dp"
         android:text="New to Movinder?"
         android:textColor="#fff"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/toRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -113,8 +112,11 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_movinder_logo"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="46dp" />
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

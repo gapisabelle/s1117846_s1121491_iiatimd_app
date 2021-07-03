@@ -27,6 +27,7 @@ import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import java.util.Random;
 public class SwipeActivity extends AppCompatActivity implements CardStackListener {
     private CardStackView cardStackView;
     private CardStackLayoutManager cardStackLayoutManager;
-    private CardStackAdapter cardStackAdapter = new CardStackAdapter(getApplicationContext());
+    private CardStackAdapter cardStackAdapter;
     MaterialButton buttonCross;
     MaterialButton buttonHeart;
     TextView swipeFeedbackText;
@@ -46,6 +47,8 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
+
+        cardStackAdapter = new CardStackAdapter(getApplicationContext());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigatin_view);
         bottomNavigationView.setSelectedItemId(R.id.swipeActivity);
@@ -71,6 +74,13 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
                         return true;
                 }
                 return false;
+            }
+        });
+
+        Api.getSwipes(getApplicationContext(), new ApiCallback() {
+            @Override
+            public void onSwipes(JSONArray result) {
+                System.out.println("[Movinder SwipeActivity] GOT SWIPES");
             }
         });
 

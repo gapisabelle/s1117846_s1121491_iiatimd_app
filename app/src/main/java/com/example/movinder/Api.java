@@ -7,10 +7,12 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.RequiresApi;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -20,7 +22,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class Api {
@@ -100,5 +104,97 @@ public class Api {
                 });
 
         requestQueue.add(jsonObjectRequest);
+    }
+
+
+    static void register(Context context, JSONObject details, ApiCallback callback) {
+        String url = "http://192.168.1.120:8000/api/auth/register";
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onRegister(response);
+                System.out.println(response.toString());
+                //TODO: handle success
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onRegister(new JSONObject());
+                error.printStackTrace();
+                System.out.printf("[MovinderError] %s\n", error.getMessage());
+                //TODO: handle failure
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
+    static void login(Context context, JSONObject details, ApiCallback callback) {
+        String url = "http://192.168.1.120:8000/api/auth/login";
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onLogin(response);
+                System.out.println(response.toString());
+
+                if (response.has("access_token")) {
+                    setAccessToken(context, response.optString("access_token"));
+                    System.out.println("[Movinder API] set access token to:" + response.optString("access_token"));
+                }
+                //TODO: handle success
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onLogin(new JSONObject());
+                error.printStackTrace();
+                System.out.printf("[MovinderError] %s\n", error.getMessage());
+                //TODO: handle failure
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
+    static void getSwipes(Context context, ApiCallback callback) {
+        String url = "http://192.168.1.120:8000/api/swipe";
+
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println(response);
+                callback.onSwipes(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                callback.onSwipes(new JSONArray());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                // Basic Authentication
+                //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
+
+                headers.put("Authorization", "Bearer " + getAccessToken(context));
+                return headers;
+            }
+        };
+
+        Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
+    static String getAccessToken(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPref.getString("token", "");
+    }
+
+    static void setAccessToken(Context context, String token) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref.edit().putString("token", token).apply();
     }
 }

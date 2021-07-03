@@ -13,22 +13,24 @@ import java.util.List;
 
 public class Utils {
 
-    public static void removeFromCardDb(Context context) {
+    public static void removeFromCardDb(Context context, Card card) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "card").fallbackToDestructiveMigration().build();
-// TODO
+                db.cardDao().delete(card);
+                db.close();
             }
         }).start();
     }
 
-    public static void addToSwipedCardDb(Context context) {
+    public static void addToSwipedCardDb(Context context, Card card) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 AppDatabase dbSwiped = Room.databaseBuilder(context, AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
-// TODO
+                dbSwiped.cardDao().insertAll(card);
+                dbSwiped.close();
             }
         }).start();
     }
@@ -50,12 +52,11 @@ public class Utils {
 //                }
 
                 List<Card> cardListSwiped = dbSwiped.cardDao().getAll();
-                List<Card> cardList = db.cardDao().getAll();
 
                 for (Card card : cardListSwiped) {
                     db.cardDao().deleteById(card.getId());
-                    cardList.remove(card);
                 }
+                List<Card> cardList = db.cardDao().getAll();
                 for (Card card : extra) {
                     cardList.remove(card);
 //                    db.cardDao().deleteById(card.getId());
