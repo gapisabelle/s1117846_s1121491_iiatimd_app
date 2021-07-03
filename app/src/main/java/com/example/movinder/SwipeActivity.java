@@ -77,13 +77,6 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
             }
         });
 
-        Api.getSwipes(getApplicationContext(), new ApiCallback() {
-            @Override
-            public void onSwipes(JSONArray result) {
-                System.out.println("[Movinder SwipeActivity] GOT SWIPES");
-            }
-        });
-
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -128,26 +121,46 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
         Api.getCards(getApplicationContext(), new ApiCallback() {
             @Override
             public void onCards(Card[] cards) {
-                Utils.filterCards(getApplicationContext(), cards, new ApiCallback() {
+                Api.getSwipes(getApplicationContext(), new ApiCallback() {
                     @Override
-                    public void onCards(Card[] cards) {
-                        runOnUiThread(new Runnable() {
+                    public void onSwipes(JSONArray result) {
+                        List<Card> cardList = new ArrayList<>();
+                        for (int i = 0; i < result.length(); i++) {
+                            JSONObject obj = result.optJSONObject(i);
+                            if (!obj.has("id")) break;
+                            Card card = new Card();
+                            card.setId(obj.optInt("filmid"));
+                            card.setLiked(obj.optInt("liked"));
+                            cardList.add(card);
+                        }
+                        new Thread(new Runnable() {
                             @Override
                             public void run() {
+                                Utils.setSwipedCardDb(getApplicationContext(), cardList.toArray(new Card[0]));
+                                Utils.filterCards(getApplicationContext(), cards, new ApiCallback() {
+                                    @Override
+                                    public void onCards(Card[] cards) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
 //                                List<Card> localCards = new ArrayList<Card>(Arrays.asList(cardStackAdapter.getLocalDataSet()));
 //                                Card[] localCards = cardStackAdapter.getLocalDataSet();
-                                List<Card> localCards = Arrays.asList(cards);
+                                                List<Card> localCards = Arrays.asList(cards);
 //                                localCards.addAll(Arrays.asList(cards));
 
 
-                                cardStackAdapter.addToLocalDataSet(localCards);
-                                buttonCross.setVisibility(View.VISIBLE);
-                                buttonHeart.setVisibility(View.VISIBLE);
-                                swipeFeedbackText.setVisibility(View.GONE);
+                                                cardStackAdapter.addToLocalDataSet(localCards);
+                                                buttonCross.setVisibility(View.VISIBLE);
+                                                buttonHeart.setVisibility(View.VISIBLE);
+                                                swipeFeedbackText.setVisibility(View.GONE);
+                                            }
+                                        });
+                                    }
+                                }, cardStackAdapter.getLocalDataSet());
                             }
-                        });
+                        }).start();
                     }
-                }, cardStackAdapter.getLocalDataSet());
+                });
             }
         });
     }
@@ -198,39 +211,31 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
     @Override
     public void onCardSwiped(Direction direction) {
         System.out.println("[Movinder SwipeActivity] onCardSwiped");
+        int position = cardStackLayoutManager.getTopPosition()-1;
+        Card card = cardStackAdapter.getCard(position);
+
         AsyncTask.execute(() -> {
-            AppDatabase dbCards = Room.databaseBuilder(getApplicationContext(),
-                    AppDatabase.class, "card").build();
 
-            AppDatabase dbSwiped = Room.databaseBuilder(getApplicationContext(),
-                    AppDatabase.class, "cardSwiped").build();
-
-
-            int position = cardStackLayoutManager.getTopPosition()-1;
-            Card card = cardStackAdapter.getCard(position);
-
-            List<Card> cardList = dbCards.cardDao().getAll();
-            System.out.println("[Movinder SwipeActivity] cardList size:" + cardList.size());
-            if (cardList.size() <= 5) {
+            System.out.println("[Movinder SwipeActivity] cardList size:" + cardStackAdapter.getItemCount());
+            if (cardStackAdapter.getItemCount() <= 5) {
                 this.getCards();
             }
 
-            System.out.printf("[Movinder SwipeActivity] deleteById \nid:%s\ntitle:%s\nexists:%s\n\n", card.getId(), card.getTitle(), dbCards.cardDao().exists(card.getId()));
-            dbCards.cardDao().deleteById(card.getId());
-            if (!dbSwiped.cardDao().exists(card.getId())) {
-                card.setLiked(direction == Direction.Left ? -1 : 1);
-                dbSwiped.cardDao().insertAll(card);
-            }
-
-            dbSwiped.close();
-            dbCards.close();
-
-            int index = cardStackAdapter.removeCardById(cardStackAdapter.getCard(position).getId());
+            int index = cardStackAdapter.removeCardById(card.getId());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
 //                    cardStackAdapter.notifyItemRangeChanged(index,cardStackAdapter.getItemCount());
                     cardStackAdapter.notifyItemRemoved(index);
+                }
+            });
+
+            Utils.addToSwipedCardDb(getApplicationContext(), card);
+            Utils.removeFromCardDb(getApplicationContext(), card);
+            Api.pushSwipe(getApplicationContext(), card, new ApiCallback() {
+                @Override
+                public void onSwipeAdded(JSONObject result) {
+                    System.out.println("[Movinder SwipeActivity] Swipe added to DB? " + result.toString());
                 }
             });
         });

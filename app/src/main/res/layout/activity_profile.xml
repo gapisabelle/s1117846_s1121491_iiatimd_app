@@ -19,13 +19,22 @@
         app:menu="@menu/bottom_nav"/>
 
     <Button
+        android:id="@+id/btnProfileLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/btnClearSwipedDb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Clear swiped DB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnProfileLogout" />
 
     <Button
         android:id="@+id/btnClearPageDb"
