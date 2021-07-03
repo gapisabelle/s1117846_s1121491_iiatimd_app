@@ -56,7 +56,7 @@ public class Api {
         }
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        String url = "http://192.168.1.120:8000/api/tv/popular/" + page;
+        String url = "https://iiatimd.royoosterlee.nl/api/tv/popular/" + page;
         System.out.println("[Movinder] GET MOVIE DATA");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -110,7 +110,7 @@ public class Api {
 
 
     static void register(Context context, JSONObject details, ApiCallback callback) {
-        String url = "http://192.168.1.120:8000/api/auth/register";
+        String url = "https://iiatimd.royoosterlee.nl/api/auth/register";
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
             @Override
@@ -133,7 +133,7 @@ public class Api {
     }
 
     static void login(Context context, JSONObject details, ApiCallback callback) {
-        String url = "http://192.168.1.120:8000/api/auth/login";
+        String url = "https://iiatimd.royoosterlee.nl/api/auth/login";
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
             @Override
@@ -161,7 +161,7 @@ public class Api {
     }
 
     static void pushSwipe(Context context, Card card, ApiCallback callback) {
-        String url = "http://192.168.1.120:8000/api/swipe/store";
+        String url = "https://iiatimd.royoosterlee.nl/api/swipe/store";
 
         HashMap<String, Integer> parameters = new HashMap<>();
         parameters.put("filmId", card.getId());
@@ -195,7 +195,7 @@ public class Api {
     }
 
     static void getSwipes(Context context, ApiCallback callback) {
-        String url = "http://192.168.1.120:8000/api/swipe";
+        String url = "https://iiatimd.royoosterlee.nl/api/swipe";
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
