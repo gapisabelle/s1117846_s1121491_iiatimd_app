@@ -27,6 +27,7 @@ import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -73,6 +74,13 @@ public class SwipeActivity extends AppCompatActivity implements CardStackListene
                         return true;
                 }
                 return false;
+            }
+        });
+
+        Api.getSwipes(getApplicationContext(), new ApiCallback() {
+            @Override
+            public void onSwipes(JSONArray result) {
+                System.out.println("[Movinder SwipeActivity] GOT SWIPES");
             }
         });
 

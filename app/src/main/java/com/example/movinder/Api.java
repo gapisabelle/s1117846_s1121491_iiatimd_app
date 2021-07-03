@@ -7,10 +7,12 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.RequiresApi;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -136,6 +138,11 @@ public class Api {
             public void onResponse(JSONObject response) {
                 callback.onLogin(response);
                 System.out.println(response.toString());
+
+                if (response.has("access_token")) {
+                    setAccessToken(context, response.optString("access_token"));
+                    System.out.println("[Movinder API] set access token to:" + response.optString("access_token"));
+                }
                 //TODO: handle success
             }
         }, new Response.ErrorListener() {
@@ -149,5 +156,45 @@ public class Api {
         });
 
         Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
+    static void getSwipes(Context context, ApiCallback callback) {
+        String url = "http://192.168.1.120:8000/api/swipe";
+
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println(response);
+                callback.onSwipes(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                callback.onSwipes(new JSONArray());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                // Basic Authentication
+                //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
+
+                headers.put("Authorization", "Bearer " + getAccessToken(context));
+                return headers;
+            }
+        };
+
+        Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
+    static String getAccessToken(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPref.getString("token", "");
+    }
+
+    static void setAccessToken(Context context, String token) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref.edit().putString("token", token).apply();
     }
 }

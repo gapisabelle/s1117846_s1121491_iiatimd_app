@@ -1,5 +1,6 @@
 package com.example.movinder;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public interface ApiCallback {
@@ -13,6 +14,10 @@ public interface ApiCallback {
     }
 
     default public void onLogin(JSONObject result) {
+
+    }
+
+    default public void onSwipes(JSONArray result) {
 
     }
 }
