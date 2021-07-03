@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +41,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.setUpFirebase();
 //        Intent intent = new Intent(this, ChatActivity2.class);
 //        startActivity(intent);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String loginToken = sharedPref.getString("token", "");
+
+        if (loginToken != "") {
+            gotoSwipeActivity();
+        }
+
 
         Button toRegister = findViewById(R.id.toRegister);
         toRegister.setOnClickListener(this);

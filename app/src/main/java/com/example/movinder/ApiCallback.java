@@ -17,6 +17,10 @@ public interface ApiCallback {
 
     }
 
+    default public void onSwipeAdded(JSONObject result) {
+
+    }
+
     default public void onSwipes(JSONArray result) {
 
     }

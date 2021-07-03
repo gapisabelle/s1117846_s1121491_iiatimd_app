@@ -1,6 +1,7 @@
 package com.example.movinder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,27 +13,30 @@ import java.util.Collections;
 import java.util.List;
 
 public class Utils {
+    private static boolean filtering = false;
+    private static int filterCounter = 0;
 
     public static void removeFromCardDb(Context context, Card card) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "card").fallbackToDestructiveMigration().build();
-                db.cardDao().delete(card);
-                db.close();
-            }
-        }).start();
+        AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "card").fallbackToDestructiveMigration().build();
+        db.cardDao().delete(card);
+        db.close();
     }
 
     public static void addToSwipedCardDb(Context context, Card card) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase dbSwiped = Room.databaseBuilder(context, AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
-                dbSwiped.cardDao().insertAll(card);
-                dbSwiped.close();
-            }
-        }).start();
+        AppDatabase dbSwiped = Room.databaseBuilder(context, AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
+        dbSwiped.cardDao().insertAll(card);
+        dbSwiped.close();
+    }
+    public static void addToSwipedCardDb(Context context, Card ...card) {
+        AppDatabase dbSwiped = Room.databaseBuilder(context, AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
+        dbSwiped.cardDao().insertAll(card);
+        dbSwiped.close();
+    }
+    public static void setSwipedCardDb(Context context, Card ...card) {
+        AppDatabase dbSwiped = Room.databaseBuilder(context, AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
+        dbSwiped.cardDao().deleteAll();
+        dbSwiped.cardDao().insertAll(card);
+        dbSwiped.close();
     }
 
     public static void filterCards(Context context, Card[] cards, ApiCallback callback) {
@@ -45,8 +49,9 @@ public class Utils {
                 AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "card").fallbackToDestructiveMigration().build();
                 AppDatabase dbSwiped = Room.databaseBuilder(context, AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
 
-                System.out.println("[Movinder Utils] card list: " + db.cardDao().getAll().size());
+                System.out.println("[Movinder Utils] SwipedList: " + dbSwiped.cardDao().getAll().size());
                 db.cardDao().insertAll(cards);
+                System.out.println("[Movinder Utils] card list: " + db.cardDao().getAll().size());
 //                for (int i = 0; i < cards.length-2; i++) {
 //                    db.cardDao().insertAll(cards[i]);
 //                }
@@ -54,8 +59,11 @@ public class Utils {
                 List<Card> cardListSwiped = dbSwiped.cardDao().getAll();
 
                 for (Card card : cardListSwiped) {
+                    System.out.println("[Moivinder Utils] cardId: " + card.getId());
+                    System.out.println("[Moivinder Utils] cardExists?: " + db.cardDao().exists(card.getId()));
                     db.cardDao().deleteById(card.getId());
                 }
+                System.out.println("[Movinder Utils] card list: " + db.cardDao().getAll().size());
                 List<Card> cardList = db.cardDao().getAll();
                 for (Card card : extra) {
                     cardList.remove(card);
@@ -106,5 +114,11 @@ public class Utils {
                     haveConnectedMobile = true;
         }
         return haveConnectedWifi || haveConnectedMobile;
+    }
+
+    public static void logout(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref.edit().remove("token").apply();
+        sharedPref.edit().remove("expires").apply();
     }
 }
