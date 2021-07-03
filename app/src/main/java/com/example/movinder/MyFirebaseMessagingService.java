@@ -9,5 +9,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
     public void onNewToken(String token){
         Log.d("refresh", token);
+        System.out.println("refresh" + token);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.movinder;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
@@ -12,9 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setUpFirebase();
+        this.messageSubscriber();
 //        Intent intent = new Intent(this, ChatActivity2.class);
 //        startActivity(intent);
 
@@ -98,5 +104,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void gotoSwipeActivity() {
         Intent intent = new Intent(this, SwipeActivity.class);
         startActivity(intent);
+    }
+
+    public void messageSubscriber(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    System.out.println("Not succesfull :(( " + task.getException());
+                    return;
+                }
+                String token = task.getResult();
+                System.out.println("Messagingstoken " + token);
+
+            }
+        });
+        FirebaseMessaging.getInstance().subscribeToTopic("Match").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                System.out.println("You've got a match!");
+            }
+        });
     }
 }

@@ -161,7 +161,7 @@ public class Api {
     }
 
     static void pushSwipe(Context context, Card card, ApiCallback callback) {
-        String url = "http://192.168.1.120:8000/api/swipe/store";
+        String url = "https://iiatimd.royoosterlee.nl/api/swipe/store";
 
         HashMap<String, Integer> parameters = new HashMap<>();
         parameters.put("filmId", card.getId());
