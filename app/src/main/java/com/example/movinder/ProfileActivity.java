@@ -52,6 +52,16 @@ public class ProfileActivity extends AppCompatActivity {
         Button btnClearSwipedDb = findViewById(R.id.btnClearSwipedDb);
         Button btnClearPageDb = findViewById(R.id.btnClearPageDb);
         Button btnClearCardDb = findViewById(R.id.btnClearCardDb);
+        Button btnProfileLogout = findViewById(R.id.btnProfileLogout);
+
+        btnProfileLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.logout(getApplicationContext());
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnClearSwipedDb.setOnClickListener(new View.OnClickListener() {
             @Override

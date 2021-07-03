@@ -20,7 +20,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -140,7 +142,7 @@ public class Api {
                 System.out.println(response.toString());
 
                 if (response.has("access_token")) {
-                    setAccessToken(context, response.optString("access_token"));
+                    setAccessToken(context, response.optString("access_token"), response.optInt("expires_in"));
                     System.out.println("[Movinder API] set access token to:" + response.optString("access_token"));
                 }
                 //TODO: handle success
@@ -154,6 +156,40 @@ public class Api {
                 //TODO: handle failure
             }
         });
+
+        Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
+    static void pushSwipe(Context context, Card card, ApiCallback callback) {
+        String url = "http://192.168.1.120:8000/api/swipe/store";
+
+        HashMap<String, Integer> parameters = new HashMap<>();
+        parameters.put("filmId", card.getId());
+        parameters.put("liked", card.getLiked());
+
+        JSONObject params = new JSONObject(parameters);
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.onSwipeAdded(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onSwipeAdded(new JSONObject());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                // Basic Authentication
+                //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
+
+                headers.put("Authorization", "Bearer " + getAccessToken(context));
+                return headers;
+            }
+        };
 
         Volley.newRequestQueue(context).add(jsonRequest);
     }
@@ -193,8 +229,13 @@ public class Api {
         return sharedPref.getString("token", "");
     }
 
-    static void setAccessToken(Context context, String token) {
+    static void setAccessToken(Context context, String token, int expires_in) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPref.edit().putString("token", token).apply();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, expires_in);
+        String expires = (new SimpleDateFormat()).format(calendar.getTime());
+        sharedPref.edit().putString("expires", expires).apply();
+        System.out.printf("[Movinder Api] expires:%s\n", expires);
     }
 }
