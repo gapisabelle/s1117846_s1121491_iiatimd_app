@@ -70,16 +70,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String fcmToken = sharedPref.getString("fcmtoken", "");
                 Map<String, String> params = new HashMap();
                 params.put("email", loginEmail.getText().toString());
                 params.put("password", loginPassword.getText().toString());
+                params.put("fcmtoken", fcmToken);
                 JSONObject details = new JSONObject(params);
                 Api.login(getApplicationContext(), details, new ApiCallback() {
                     @Override
                     public void onLogin(JSONObject result) {
                         try {
                             System.out.printf("[Movinder RegisterActivity] onRegister %s\n", result.get("user"));
-                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             sharedPref.edit().putInt("page", 1).commit();
                             gotoSwipeActivity();
                         } catch (JSONException e) {
@@ -128,14 +130,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String token = task.getResult();
                 System.out.println("Messagingstoken " + token);
 
-            }
-        });
-        FirebaseMessaging.getInstance().subscribeToTopic("Match").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                System.out.println("You've got a match!");
-            }
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                sharedPref.edit().putString("fcmtoken", token).apply();
 
+            }
         });
     }
 

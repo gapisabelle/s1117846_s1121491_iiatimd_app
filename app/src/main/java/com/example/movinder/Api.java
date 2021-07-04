@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class Api {
-    private static final String BASE_URL = "https://iiatimd.royoosterlee.nl";
-//    private static final String BASE_URL = "http://192.168.1.120:8000";
+//    private static final String BASE_URL = "https://iiatimd.royoosterlee.nl";
+    private static final String BASE_URL = "http://192.168.1.120:8000";
 
     public Api() {
 
