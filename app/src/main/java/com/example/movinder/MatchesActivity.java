@@ -23,6 +23,7 @@ public class MatchesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches);
 
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigatin_view);
         bottomNavigationView.setSelectedItemId(R.id.matches);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
