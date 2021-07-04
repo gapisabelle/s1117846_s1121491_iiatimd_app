@@ -8,6 +8,7 @@ import androidx.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -50,28 +51,79 @@ public class MatchesActivity extends AppCompatActivity {
             }
         });
 
-        TextView textView = findViewById(R.id.nomatchestext);
-        textView.setText("Loading... Please wait");
 
         RecyclerView matchesList = findViewById(R.id.matchesList);
-        matchesAdapter = new MatchesAdapter();
+        matchesAdapter = new MatchesAdapter(new MatchesAdapter.ClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getApplicationContext(), ChatActivity2.class);
+                Match match = matchesAdapter.getMatch(position);
+                System.out.printf("[Movinder MatchesActivity] matchInfo (%s, %s, %s)", match.getChatId(), match.getUserImage(), match.getUsername());
+                intent.putExtra("chatId", match.getChatId());
+                intent.putExtra("userImage", match.getUserImage());
+                intent.putExtra("username", match.getUsername());
+                System.out.println("[Movinder MatchesActivity] clickedCard");
+                startActivity(intent);
+            }
+        });
         matchesList.setAdapter(matchesAdapter);
 
-        new Thread(new Runnable() {
+        this.getMatches();
+    }
+
+    public void getMatches() {
+        TextView textView = findViewById(R.id.nomatchestext);
+        textView.setVisibility(View.VISIBLE);
+        textView.setText("Loading... Please wait");
+        Api.getMatches(getApplicationContext(), new ApiCallback() {
             @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class, "cardMatches").build();
+            public void onMatches(Match[] matches) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                                AppDatabase.class, "matches").build();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                matchesAdapter.setLocalDataSet(matches);
+                            }
+                        });
+                        int dbMatchesSize = db.matchDao().getAll().size();
+                        if (matches.length == 0 && dbMatchesSize == 0) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textView.setText("You don't have any matches.");
+                                }
+                            });
+                        } else if (matches.length != 0) {
+                            db.matchDao().deleteAll();
+                            db.matchDao().insertAll(matches);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    matchesAdapter.setLocalDataSet(matches);
+                                    textView.setVisibility(View.GONE);
+                                }
+                            });
+                            db.close();
+                        } else if (dbMatchesSize != 0) {
+                            Match[] matches1 = db.matchDao().getAll().toArray(new Match[0]);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    matchesAdapter.setLocalDataSet(matches1);
+                                    textView.setVisibility(View.GONE);
+                                }
+                            });
+                        }
 
-                List<Card> cardList = db.cardDao().getAll();
+                    }
+                }).start();
 
-                // TODO: Load matches from API
-
-                if (cardList.size() == 0) textView.setText("You don't have any matches.");
-
-                matchesAdapter.setLocalDataSet(cardList.toArray(new Card[0]));
-                db.close();
             }
-        }).start();
+        });
+
     }
 }

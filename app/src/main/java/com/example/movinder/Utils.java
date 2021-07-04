@@ -121,4 +121,13 @@ public class Utils {
         sharedPref.edit().remove("token").apply();
         sharedPref.edit().remove("expires").apply();
     }
+
+    public static void setUserId(Context context, int userId) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref.edit().putInt("userId", userId).apply();
+    }
+
+    public static int getUserId(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt("userId", -1);
+    }
 }

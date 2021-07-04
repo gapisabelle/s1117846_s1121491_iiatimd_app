@@ -6,40 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".ChatActivity2">
 
-    <TextView
-        android:id="@+id/textMessage2"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/gradient"
-        android:gravity="bottom"
-        android:hint="Chat Messages Will Appear Here."
-        android:textColor="#FFFFFF"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/editMessage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.97" />
+        android:layout_marginBottom="4dp"
+        app:spanCount="1" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/textMessage2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:background="@drawable/gradient"-->
+<!--        android:gravity="bottom"-->
+<!--        android:hint="Chat Messages Will Appear Here."-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/editMessage"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.97" />-->
 
     <EditText
         android:id="@+id/editMessage"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_toStartOf="@+id/sendButton2"
         android:layout_toLeftOf="@+id/sendButton2"
-        android:background="@color/background"
+        android:background="@drawable/shape_message_input"
+        android:padding="12dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="2dp"
         android:ems="10"
-        android:imeOptions="actionSend"
         android:hint="Type Here..."
+        android:imeOptions="actionSend"
         android:inputType="text"
         android:textColorHint="#686868"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigatin_view"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sendButton2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -53,16 +69,19 @@
         android:background="@drawable/button"
         android:onClick="sendMessage"
         android:text="Send"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigatin_view"
+        android:textColor="@color/white"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigatin_view"
-        android:layout_width="422dp"
-        android:layout_height="72dp"
-        android:background="@drawable/shape_navigation"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav" />
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_navigatin_view"-->
+<!--        android:layout_width="422dp"-->
+<!--        android:layout_height="72dp"-->
+<!--        android:background="@drawable/shape_navigation"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:menu="@menu/bottom_nav" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

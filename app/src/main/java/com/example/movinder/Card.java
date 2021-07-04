@@ -5,8 +5,13 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+
 @Entity
-public class Card {
+public class Card implements Serializable {
     @PrimaryKey
     public int id;
     @ColumnInfo(name = "title")
@@ -126,4 +131,25 @@ public class Card {
     public void setImageURI(String imageURI) {
         this.imageURI = imageURI;
     }
+
+    public String toStringObject() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", getId());
+            obj.put("title", getTitle());
+            obj.put("rating", getRating());
+            obj.put("language", getLanguage());
+            obj.put("date", getDate());
+            obj.put("categories", getCategories());
+            obj.put("imageURI", getImageURI());
+            obj.put("liked", getLiked());
+            obj.put("userId", getUserId());
+            obj.put("username", getUsername());
+            return obj.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "{}";
+    }
+
 }

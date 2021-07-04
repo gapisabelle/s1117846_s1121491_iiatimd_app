@@ -24,4 +24,8 @@ public interface ApiCallback {
     default public void onSwipes(JSONArray result) {
 
     }
+
+    default public void onMatches(Match[] matches) {
+
+    }
 }
