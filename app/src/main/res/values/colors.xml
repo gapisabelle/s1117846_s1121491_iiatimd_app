@@ -16,4 +16,7 @@
     <color name="nav_background_tdark">#29FFFFFF</color>
     <color name="nav_background_tlight">#29000000</color>
 
+    <color name="greyTransparent">#80c8c8c8</color>
+    <color name="chatMessageDark">#3c3c3e</color>
+
 </resources>

@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onLogin(JSONObject result) {
                         try {
                             System.out.printf("[Movinder RegisterActivity] onRegister %s\n", result.get("user"));
+                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            sharedPref.edit().putInt("page", 1).commit();
                             gotoSwipeActivity();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -94,11 +96,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setUpFirebase(){
-        if (!FirebaseApp.getApps(this).get(0).getName().equals("Movinder")) {
+        System.out.println("[Movinder MainActivity] Setting up firebase...");
+        if (FirebaseApp.getApps(this).size() == 0 || !FirebaseApp.getApps(this).get(0).getName().equals("Movinder")) {
+            System.out.println("[Movinder MainActivity] FirebaseApp not found. Creating...");
             FirebaseOptions fbOptions = new FirebaseOptions.Builder()
                     .setProjectId("iiatimd-roy-isabelle").setApplicationId("1:948383510167:web:3f1aebc24b2f621e3a03d2").setApiKey("AIzaSyBSLidGsDuVHu8Poi5kQ_D_bhHm_fK48T8").setDatabaseUrl("https://iiatimd-roy-isabelle-default-rtdb.europe-west1.firebasedatabase.app").build();
             FirebaseApp.initializeApp(this, fbOptions, "Movinder");
+            FirebaseDatabase.getInstance(FirebaseApp.getInstance("Movinder")).setPersistenceEnabled(true);
         }
+        System.out.println("[Movinder MainActivity] Firebase setup done.");
     }
 
     public void gotoSwipeActivity() {

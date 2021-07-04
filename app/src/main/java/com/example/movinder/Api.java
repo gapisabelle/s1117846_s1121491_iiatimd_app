@@ -30,6 +30,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class Api {
+//    private static final String BASE_URL = "https://iiatimd.royoosterlee.nl";
+    private static final String BASE_URL = "http://192.168.1.120:8000";
+
     public Api() {
 
     }
@@ -56,7 +59,7 @@ public class Api {
         }
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        String url = "https://iiatimd.royoosterlee.nl/api/tv/popular/" + page;
+        String url = BASE_URL + "/api/tv/popular/" + page;
         System.out.println("[Movinder] GET MOVIE DATA");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -108,9 +111,61 @@ public class Api {
         requestQueue.add(jsonObjectRequest);
     }
 
+    static void getMatches(Context context, ApiCallback callback) {
+        String url = BASE_URL + "/api/matches";
+
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    List<Match> matches = new ArrayList<Match>();
+
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject obj = response.getJSONObject(i);
+                        System.out.println(obj);
+                        Card card = new Card();
+                        card.setId(obj.getInt("filmid"));
+                        card.setImageURI(obj.getString("image"));
+                        card.setTitle(obj.getString("title"));
+
+                        Match match = new Match();
+                        match.setCard(card);
+                        match.setChatId(obj.getString("chat_id"));
+                        match.setUsername(obj.getJSONObject("otherUser").getString("name"));
+                        match.setUserImage(obj.getJSONObject("otherUser").getString("image"));
+
+                        matches.add(match);
+                    }
+
+                    callback.onMatches(matches.toArray(new Match[0]));
+                } catch (JSONException e) {
+                    callback.onMatches(new Match[0]);
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onMatches(new Match[0]);
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                // Basic Authentication
+                //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
+
+                headers.put("Authorization", "Bearer " + getAccessToken(context));
+                return headers;
+            }
+        };
+
+        Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
 
     static void register(Context context, JSONObject details, ApiCallback callback) {
-        String url = "https://iiatimd.royoosterlee.nl/api/auth/register";
+        String url = BASE_URL + "/api/auth/register";
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
             @Override
@@ -133,7 +188,7 @@ public class Api {
     }
 
     static void login(Context context, JSONObject details, ApiCallback callback) {
-        String url = "https://iiatimd.royoosterlee.nl/api/auth/login";
+        String url = BASE_URL + "/api/auth/login";
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
             @Override
@@ -144,6 +199,10 @@ public class Api {
                 if (response.has("access_token")) {
                     setAccessToken(context, response.optString("access_token"), response.optInt("expires_in"));
                     System.out.println("[Movinder API] set access token to:" + response.optString("access_token"));
+                }
+                if (response.has("user") && response.optJSONObject("user").has("id")) {
+                    System.out.println("[Movinder API] get UserID " + response.optJSONObject("user").optInt("id"));
+                    Utils.setUserId(context, response.optJSONObject("user").optInt("id"));
                 }
                 //TODO: handle success
             }
@@ -161,13 +220,21 @@ public class Api {
     }
 
     static void pushSwipe(Context context, Card card, ApiCallback callback) {
-        String url = "https://iiatimd.royoosterlee.nl/api/swipe/store";
+        String url = BASE_URL + "/api/swipe/store";
 
         HashMap<String, Integer> parameters = new HashMap<>();
         parameters.put("filmId", card.getId());
         parameters.put("liked", card.getLiked());
 
         JSONObject params = new JSONObject(parameters);
+        try {
+            params.put("image", card.getImageURI());
+            params.put("title", card.getTitle());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("[Movinder Api] pushSwipe " + params.toString());
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             @Override
@@ -195,7 +262,7 @@ public class Api {
     }
 
     static void getSwipes(Context context, ApiCallback callback) {
-        String url = "https://iiatimd.royoosterlee.nl/api/swipe";
+        String url = BASE_URL + "/api/swipe";
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
