@@ -11,14 +11,16 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService{
     private static final String TAG = "MyFirebaseMessaging";
+    private static BottomNavigationView bottomNavigation = null;
+
     @Override
-
-
     public void onNewToken(String token){
         Log.d("refresh", token);
         System.out.println("refresh" + token);
@@ -27,8 +29,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage){
+        if (bottomNavigation != null) {
+            BadgeDrawable badge = bottomNavigation.getOrCreateBadge(R.id.matches);
+            badge.setVisible(true);
+//            badge.setNumber(1);
+        }
         sendNotification(remoteMessage.getData().get("Movinder"));
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -51,6 +57,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         notificationManager.notify(0, notificationBuilder.build());
     }
 
-
+    public static void setBottomNavigation(BottomNavigationView bottomNavigation) {
+        MyFirebaseMessagingService.bottomNavigation = bottomNavigation;
+    }
 
 }

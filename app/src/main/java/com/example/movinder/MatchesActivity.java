@@ -27,6 +27,10 @@ public class MatchesActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigatin_view);
         bottomNavigationView.setSelectedItemId(R.id.matches);
+        bottomNavigationView.removeBadge(R.id.matches);
+
+        MyFirebaseMessagingService.setBottomNavigation(bottomNavigationView);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

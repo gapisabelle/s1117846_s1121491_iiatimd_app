@@ -24,6 +24,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigatin_view);
         bottomNavigationView.setSelectedItemId(R.id.profile);
+
+        MyFirebaseMessagingService.setBottomNavigation(bottomNavigationView);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
