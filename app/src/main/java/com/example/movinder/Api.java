@@ -291,6 +291,24 @@ public class Api {
         Volley.newRequestQueue(context).add(jsonRequest);
     }
 
+    static void notifyMsg(Context context, JSONObject details) {
+        String url = BASE_URL + "/api/notifymsg";
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, details, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        Volley.newRequestQueue(context).add(jsonRequest);
+    }
+
     static String getAccessToken(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPref.getString("token", "");

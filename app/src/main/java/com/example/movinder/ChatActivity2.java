@@ -22,9 +22,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatActivity2 extends AppCompatActivity {
 
@@ -107,6 +111,12 @@ public class ChatActivity2 extends AppCompatActivity {
         EditText myEditText = findViewById(R.id.editMessage);
         ChatMsg chatMsg = new ChatMsg(myEditText.getText().toString(), date, userId);
         myDatabase.push().setValue(chatMsg);
+
+        Map<String, String> params = new HashMap();
+        params.put("chatid", chatId);
+        params.put("msg", myEditText.getText().toString());
+        JSONObject details = new JSONObject(params);
+        Api.notifyMsg(getApplicationContext(), details);
         myEditText.setText("");
     }
 
