@@ -58,7 +58,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.ViewHold
         holder.username.setText(localDataSet[position].getUsername());
 
         Glide.with(holder.cardImage).load(localDataSet[position].getCard().getImageURI()).into(holder.cardImage);
-        Glide.with(holder.userImage).load(localDataSet[position].getUserImage()).into(holder.userImage);
+        Glide.with(holder.userImage).load("https://eu.ui-avatars.com/api/?name=" + localDataSet[position].getUsername()).into(holder.userImage);
     }
 
     @Override
