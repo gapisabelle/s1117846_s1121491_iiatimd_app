@@ -52,9 +52,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        Button btnClearSwipedDb = findViewById(R.id.btnClearSwipedDb);
-        Button btnClearPageDb = findViewById(R.id.btnClearPageDb);
-        Button btnClearCardDb = findViewById(R.id.btnClearCardDb);
+//        Button btnClearSwipedDb = findViewById(R.id.btnClearSwipedDb);
+//        Button btnClearPageDb = findViewById(R.id.btnClearPageDb);
+//        Button btnClearCardDb = findViewById(R.id.btnClearCardDb);
         Button btnProfileLogout = findViewById(R.id.btnProfileLogout);
 
         btnProfileLogout.setOnClickListener(new View.OnClickListener() {
@@ -65,61 +65,63 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        btnClearSwipedDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppDatabase dbSwiped = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
-                        dbSwiped.cardDao().deleteAll();
-                        dbSwiped.close();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Cleared the Swiped cards.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }).start();
-            }
-        });
-
-        btnClearPageDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPref.edit().remove("tvPage").apply();
-                Toast.makeText(getApplicationContext(), "Cleared the page db.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnClearCardDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "card").fallbackToDestructiveMigration().build();
-                        db.cardDao().deleteAll();
-                        db.close();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Cleared the cards from DB.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }).start();
-            }
-        });
-
-        findViewById(R.id.easterEggBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "BigBrainError: The brain was not responding anymore.", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }
+//  CLEAR DATABASE FUNCTIONS
+
+
+//        btnClearSwipedDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        AppDatabase dbSwiped = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "cardSwiped").fallbackToDestructiveMigration().build();
+//                        dbSwiped.cardDao().deleteAll();
+//                        dbSwiped.close();
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(getApplicationContext(), "Cleared the Swiped cards.", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                }).start();
+//            }
+//        });
+//
+//        btnClearPageDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                sharedPref.edit().remove("tvPage").apply();
+//                Toast.makeText(getApplicationContext(), "Cleared the page db.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        btnClearCardDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "card").fallbackToDestructiveMigration().build();
+//                        db.cardDao().deleteAll();
+//                        db.close();
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(getApplicationContext(), "Cleared the cards from DB.", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                }).start();
+//            }
+//        });
+//
+//        findViewById(R.id.easterEggBtn).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(getApplicationContext(), "BigBrainError: The brain was not responding anymore.", Toast.LENGTH_LONG).show();
+//            }
+//        });
